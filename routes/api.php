@@ -21,11 +21,19 @@ Route::prefix('auth')->group(function () {
 Route::get('/users', [AuthController::class, 'users'])->name('users');
 
 Route::middleware('jwt')->prefix('teams')->group(function () {
-    Route::post('/create', [TeamsController::class, 'createTeam'])->name('teams.create');
     Route::get('/teams', [TeamsController::class, 'teams'])->name('teams.teams');
+    Route::get('/team/{team}', [TeamsController::class, 'getTeamById']);
+    Route::post('/create', [TeamsController::class, 'createTeam'])->name('teams.create');
+    Route::get('/getTeamById/{team}', [TeamsController::class, 'getTeamById']);
+    //ROUTES FOR TEAMS
+    Route::get('/teams/{teamId}/available-users', [AuthController::class, 'availableUsers'])->name('available-users');
+    // ROUTES FOR TEAM INVITATION
     Route::get('/getInvitationByToken/{token}', [TeamsController::class, 'getInvitationByToken'])->name('teams.getInvitationByToken');
-    Route::get('listInvitation/{id}',[TeamsController::class, 'listInvitation'])->name('teams.listInvitation');
-    Route::post('/invitationResponse',[TeamsController::class, 'invitationResponse'])->name('teams.invitationResponse');
+    Route::get('listInvitation/{id}', [TeamsController::class, 'listInvitation'])->name('teams.listInvitation');
+    Route::get('listInvitationteam/{id}', [TeamsController::class, 'listInvitationteam'])->name('teams.listInvitation');
+   
+    Route::post('/addMemberToTeam', [TeamsController::class, 'addMemberToTeam'])->name('teams.addMemberToTeam');
+    Route::post('/invitationResponse', [TeamsController::class, 'invitationResponse'])->name('teams.invitationResponse');
 });
 
 Route::middleware(['web'])->group(function () {

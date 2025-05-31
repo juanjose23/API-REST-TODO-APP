@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Repository;
 
 use App\Interfaces\AuthInterface;
@@ -13,8 +13,27 @@ class AuthRepository implements AuthInterface
 {
     public function getAllUsers()
     {
-        return User::select('id','name','email','avatar')->where('is_active', true)->get();
+        return User::select('id', 'name', 'email', 'avatar')->where('is_active', true)->get();
     }
+public function availableUsers($teamId)
+{
+    $teamId = (int) $teamId; // asegurar que es int
+
+    $users = User::select('id', 'name', 'email', 'avatar')
+        ->where('is_active', true)
+        ->whereDoesntHave('teams', function ($query) use ($teamId) {
+            $query->where('teams.id', $teamId);
+        })
+        ->whereDoesntHave('teamsCreated', function ($query) use ($teamId) {
+            $query->where('teams.id', $teamId);
+        })
+        ->get();
+        \Log::info('Available users for team ID ' . $teamId, ['users' => $users]);
+
+    return $users;
+}
+
+
 
     public function register(array $data)
     {
@@ -38,8 +57,8 @@ class AuthRepository implements AuthInterface
     public function findOrCreateSocialUser(SocialUser $socialUser, string $provider)
     {
         $user = User::where('provider_id', $socialUser->getId())
-                    ->orWhere('email', $socialUser->getEmail())
-                    ->first();
+            ->orWhere('email', $socialUser->getEmail())
+            ->first();
 
         if (!$user) {
             $user = User::create([
@@ -96,11 +115,11 @@ class AuthRepository implements AuthInterface
     {
         // Asegúrate de que el array tiene los datos necesarios
         $validatedData = [
-            'email' => $data['email'], 
-            'password' => $data['password'], 
+            'email' => $data['email'],
+            'password' => $data['password'],
             'token' => $data['token'],
         ];
-    
+
         // Llamada al método reset con los datos validados
         $status = Password::reset(
             $validatedData,
@@ -109,8 +128,8 @@ class AuthRepository implements AuthInterface
                 event(new PasswordReset($user));
             }
         );
-    
+
         return $status;
     }
-    
+
 }

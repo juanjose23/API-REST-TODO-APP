@@ -21,6 +21,11 @@ class AuthService
         return $this->auth->getAllUsers();
     }
 
+    public function availableUsers($TeamId)
+    {
+        return $this->auth->availableUsers($TeamId);
+    }
+
     public function register(array $data)
     {
         $user = $this->auth->register($data);

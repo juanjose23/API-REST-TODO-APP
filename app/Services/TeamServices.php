@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Interfaces\TeamInterface;
 
-class TeamServices
+class  TeamServices
 {
     protected TeamInterface $teamRepository;
 
@@ -12,6 +12,21 @@ class TeamServices
         $this->teamRepository = $teamRepository;
     }
 
+    /**
+     * Summary of getTeamById
+     * @param mixed $teamId
+     */
+    public function getTeamById ($teamId)
+    {
+        return $this->teamRepository->getTeamById($teamId);
+    }
+
+
+
+    /**
+     * Summary of createTeam
+     * @param array $data
+     */
     public function createTeam(array $data)
     {
         $nombre = $data['name'];
@@ -30,13 +45,18 @@ class TeamServices
         $invitations = $data['members'] ?? null;
         if ($invitations) {
             foreach ($invitations as $invitation) {
-
                 $this->teamRepository->inviteUserToTeam($team, $invitation['value']);
             }
         }
-
         return $this->teamRepository->getTeamById($team['id']);
     }
+
+
+public function addMemberToTeam(int $teamId, int $userId, string $role = 'member')
+{
+    return $this->teamRepository->inviteUserToTeam($teamId, $userId, $role);
+}
+
 
     public function updateTeam($team, array $data)
     {
@@ -53,6 +73,28 @@ class TeamServices
         return $this->teamRepository->getAllTeams($userId);
     }
 
+   
+    public function listInvitationTeams($teamId)
+    {
+        $invitationList = $this->teamRepository->getInvitationTeams($teamId);
+
+        $result = $invitationList->map(function ($invitation) {
+            return [
+                'name' => $invitation->team->name,
+                'description' => $invitation->team->description,
+                'organizer' => $invitation->team->owner->name,
+                'email' => $invitation->user->email,
+                'date' => $invitation->created_at,
+                'udapte'=> $invitation->updated_at,
+                'roles' => $invitation->roles,
+                'status' => $invitation->status,
+                'token' => $invitation->token,
+            ];
+        });
+
+        return response()->json($result, 200);
+    }
+
     /**
      * Summary of listInvitation
      * @param mixed $userId
@@ -66,8 +108,8 @@ class TeamServices
             return [
                 'name' => $invitation->team->name,
                 'description' => $invitation->team->description,
-                'organizer' => $invitation->team->creator->name,
-                'email' => $invitation->team->creator->email,
+                'organizer' => $invitation->team->owner->name,
+                'email' => $invitation->team->owner->email,
                 'date' => $invitation->created_at,
                 'roles' => $invitation->roles,
                 'status' => $invitation->status,
@@ -88,8 +130,9 @@ class TeamServices
         if (!$invitation) {
             return response()->json(['message' => 'Invitation not found'], 404);
         }
-
-        if ($invitation->team->creator->id == auth()->user()->id) {
+ 
+        if ($invitation->team->owner->id == auth()->user()->id) {
+          
             return response()->json(['message' => 'Invitation not found'], 404);
         }
 
@@ -97,8 +140,8 @@ class TeamServices
 
             'name' => $invitation->team->name,
             'description' => $invitation->team->description,
-            'organizer' => $invitation->team->creator->name,
-            'email' => $invitation->team->creator->email,
+            'organizer' => $invitation->team->owner->name,
+            'email' => $invitation->team->owner->email,
             'date' => $invitation->created_at,
             'roles' => $invitation->roles,
             'status' => $invitation->status,

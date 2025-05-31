@@ -28,6 +28,16 @@ class AuthController extends Controller
         $users = $this->authService->getAllUsers();
         return response()->json($users, 200);
     }
+
+    
+    public function availableUsers($TeamId)
+    {
+        // Logic to get all users
+        $teamIdInt = (int) $TeamId;
+        $users = $this->authService->availableUsers($teamIdInt);
+        \Log::info('Available Users: ', ['users' => $users]);
+        return response()->json($users, 200);
+    }
     public function register(Request $request)
     {
         $validatedData = $request->validate([

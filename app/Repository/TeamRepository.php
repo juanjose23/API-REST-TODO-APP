@@ -32,12 +32,13 @@ class TeamRepository implements TeamInterface
         $team->save();
         return $team;
     }
+
     /**
      * Summary of getAllTeams
      * @param mixed $userId
-     * @return \Illuminate\Database\Eloquent\Collection<int, Team>
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAllTeams($userId)
+    public function getAllTeams(int $userId)
     {
         return Team::where('is_active', true)
             ->where(function ($query) use ($userId) {
@@ -46,47 +47,90 @@ class TeamRepository implements TeamInterface
                         $q->where('user_id', $userId);
                     });
             })
-            ->with(['users', 'tasks'])
-            ->get();
+            ->withCount(['owner', 'members'])
+            ->paginate(10);
     }
 
-    public function getTeamById($id)
+    public function getTeamById(int $id): array
     {
-        // Logic to get a team by ID
-        return Team::where('id', $id)->where('is_active', true)->with(['users', 'tasks'])->first();
+        $team = Team::with(['owner', 'members', 'tasks'])->findOrFail($id);
+        $currentUserId = auth()->id();
+
+        $currentUserRoles = $this->getCurrentUserRole($team, $currentUserId);
+
+        $members = $this->formatMembers($team);
+
+        return [
+            'id' => $team->id,
+            'name' => $team->name,
+            'description' => $team->description,
+            'userId' => optional($team->owner)->id,
+            'isActive' => $team->is_active,
+            'currentUserRoles' => $currentUserRoles,
+            'members' => $members,
+        ];
     }
+
+    private function getCurrentUserRole(Team $team, int $currentUserId): ?string
+    {
+        if ($currentUserId === optional($team->owner)->id) {
+            return 'owner';
+        }
+
+        $currentUserMember = $team->members->firstWhere('id', $currentUserId);
+
+        return $currentUserMember?->pivot->roles ?? null;
+    }
+
+    private function formatMembers(Team $team): array
+    {
+        return $team->members->map(function ($member) {
+            return [
+                'memberId' => $member->id,
+                'label' => $member->name,
+                'roles' => $member->pivot->roles ?? null,
+            ];
+        })->toArray();
+    }
+
     /**
      * Summary of addMemberToTeam
      * @param mixed $team
      * @param mixed $userId
      * @param mixed $role
      */
-    public function addMemberToTeam($teamId, $userId, $role)
+   public function addMemberToTeam(int $teamId, int $userId, string $role)
     {
-
         $team = Team::findOrFail($teamId);
-        $alreadyMember = $team->members()->where('user_id', $userId)->exists();
 
-        if ($alreadyMember) {
-
-            // $team->members()->updateExistingPivot($userId, ['roles' => $role]);
-
-            return response()->json(['message' => 'El usuario ya es miembro del equipo.'], 409);
+        if ($this->isMember($team, $userId)) {
+            throw new \Exception('El usuario ya es miembro del equipo.', 409);
         }
-        $team->members()->attach($userId, ['roles' => $role]);
+
+        $team->members()->attach($userId, ['roles' => $role ?? 'member']);
 
         return $team->members()->where('user_id', $userId)->first();
     }
 
+    private function isMember(Team $team, int $userId): bool
+    {
+        return $team->members()->where('user_id', $userId)->exists();
+    }
 
 
 
-    public function inviteUserToTeam($team, $userId)
+    /** 
+     * Summary of inviteUserToTeam
+     * @param mixed $team
+     * @param mixed $userId
+     * @return Invitation
+     */
+    public function inviteUserToTeam($team, int $userId , $role = 'member')
     {
         $invitation = Invitation::create([
-            'team_id' => $team->id,
+            'team_id' => $team->id ?? $team,
             'user_id' => $userId,
-            'roles' => 'member',
+            'roles' =>  $role ?? 'member',
             'token' => Str::random(8),
             'status' => 'pending'
         ]);
@@ -101,20 +145,49 @@ class TeamRepository implements TeamInterface
 
         return $invitation;
     }
+
+
+
+    /**
+     * 
+     * 
+     * @param mixed $TeamId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Invitation>
+     */
+    public function getInvitationTeams(int $TeamId)
+    {
+        return Invitation::with('team')
+            ->where('team_id', $TeamId)
+            ->get();
+    }
+
+
+
+
+    /**
+     * Summary of listInvitation
+     * @param mixed $userId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Invitation>
+     */
     public function listInvitation($userId)
     {
         return Invitation::with('team')
             ->where('user_id', $userId)
             ->get();
     }
-
+    /**
+     * Summary of getInvitationByToken
+     * @param mixed $token
+     * @return Invitation|null
+     */
     public function getInvitationByToken($token)
     {
 
-        return Invitation::with('team')
+        return Invitation::with('team', 'team.owner')
             ->where('token', $token)
             ->first();
     }
+
 
     public function invitationResponse($token, $status)
     {

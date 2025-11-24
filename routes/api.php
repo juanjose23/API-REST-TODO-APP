@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 
+Route::prefix('v2/auth')->group(function () {
+    require base_path('src/auth/user/Presentation/routes/api.php');
+});
+
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -31,7 +35,7 @@ Route::middleware('jwt')->prefix('teams')->group(function () {
     Route::get('/getInvitationByToken/{token}', [TeamsController::class, 'getInvitationByToken'])->name('teams.getInvitationByToken');
     Route::get('listInvitation/{id}', [TeamsController::class, 'listInvitation'])->name('teams.listInvitation');
     Route::get('listInvitationteam/{id}', [TeamsController::class, 'listInvitationteam'])->name('teams.listInvitation');
-   
+
     Route::post('/addMemberToTeam', [TeamsController::class, 'addMemberToTeam'])->name('teams.addMemberToTeam');
     Route::post('/invitationResponse', [TeamsController::class, 'invitationResponse'])->name('teams.invitationResponse');
 });

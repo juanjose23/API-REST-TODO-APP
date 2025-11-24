@@ -1,10 +1,10 @@
 <?php
 
 namespace Src\auth\user\presentation\controllers;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use OpenApi\Attributes as OAT;
 

@@ -2,7 +2,6 @@
 
 namespace Src\auth\user\domain\Entities;
 
-use Illuminate\Support\Facades\Hash;
 use Src\auth\user\domain\ValueObjects\ProviderId;
 use Src\auth\user\domain\ValueObjects\ProviderName;
 use Src\auth\user\domain\ValueObjects\UserEmail;

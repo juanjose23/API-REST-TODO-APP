@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
@@ -37,6 +37,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'password',
         'avatar',
         'id',
+        'email_verified_at',
+        'provider_id',
+        'provider',
+        'is_active',
+        'remember_token',
+        'verification_token',
     ];
 
     /**

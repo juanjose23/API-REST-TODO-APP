@@ -133,37 +133,20 @@
         <div class="email-header">
             <img src="https://via.placeholder.com/200x40/4f46e5/ffffff?text=Tu+Empresa" alt="Logo" class="logo">
         </div>
+        <p>Hola, {{ $name }}</p>
 
-        <!-- Body -->
-        <div class="email-body">
-            <h1>¡Hola!</h1>
+        <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
 
-            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. No te preocupes, estamos aquí para ayudarte a recuperar el acceso.</p>
+        <a href="{{ $url }}">Verificar correo</a>
 
-            <p>Para crear una nueva contraseña, simplemente haz clic en el botón a continuación:</p>
+        <p>Este enlace expirará en 60 minutos: {{ $expiresAt->format('H:i d/m/Y') }}</p>
 
-            <h1>Hola, {{ $name }}</h1>
-            <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
-            <a href="{{ $verificationUrl }}">Verificar correo</a>
+        <div class="divider"></div>
 
-            <p>Si el botón no funciona, también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
-            <p style="background-color: #f3f4f6; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 14px;">
-                {{ url( env('FRONT_URL').'/auth/reset-password/'.$token.'?email='.$email) }}
-            </p>
-
-            <div class="divider"></div>
-
-            <p><strong>¿No solicitaste este cambio?</strong></p>
-            <p>Si no has solicitado restablecer tu contraseña, puedes ignorar este correo electrónico. Tu cuenta sigue segura y no se ha realizado ningún cambio.</p>
-
-            <div class="security-notice">
-                <p>Por razones de seguridad, este enlace caducará en 60 minutos.</p>
-            </div>
-        </div>
-
+        <p>Si no creaste esta cuenta, puedes ignorar este mensaje.</p>
         <!-- Footer -->
         <div class="email-footer">
-            <p>&copy; 2024 Tu Empresa. Todos los derechos reservados.</p>
+            <p>&copy; {{ date('Y') }} Tu Empresa. Todos los derechos reservados.</p>
             <p>Dirección de la empresa, Ciudad, País</p>
         </div>
     </div>

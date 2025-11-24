@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 
 
 Route::prefix('v2/auth')->group(function () {
-    require base_path('src/auth/user/Presentation/routes/api.php');
+    require base_path('src/modules/auth/user/Presentation/routes/api.php');
 });
 
 Route::prefix('auth')->group(function () {

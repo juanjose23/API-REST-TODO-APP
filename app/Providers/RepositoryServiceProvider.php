@@ -4,12 +4,11 @@ namespace App\Providers;
 
 use App\Interfaces\AuthInterface;
 use App\Interfaces\TeamInterface;
-use App\Models\Team;
 use App\Repository\AuthRepository;
 use App\Repository\TeamRepository;
 use Illuminate\Support\ServiceProvider;
-use Src\auth\user\domain\Contracts\UserRepositoryInterface;
-use Src\auth\user\infrastructure\repositories\EloquentUserRepository;
+use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Infrastructure\repositories\EloquentUserRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

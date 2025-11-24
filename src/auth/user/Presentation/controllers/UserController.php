@@ -75,7 +75,7 @@ class UserController extends Controller
             ], 201);
 
         } catch (Throwable $e) {
-            \Illuminate\Log\log($e);
+            \Illuminate\Support\Facades\Log::error($e);
             return ErrorHelper::jsonResponse($e);
         }
     }

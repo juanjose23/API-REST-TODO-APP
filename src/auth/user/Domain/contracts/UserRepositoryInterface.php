@@ -13,6 +13,5 @@ interface UserRepositoryInterface
     //public function availableUsers($teamId);
     public function register(User $user);
     public function existsByEmail(UserEmail $email): bool;
-    //public function availableUsers($teamId);
 
 }

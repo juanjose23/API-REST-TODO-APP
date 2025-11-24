@@ -14,7 +14,7 @@ use OpenApi\Attributes as OAT;
 readonly class RegisterUserResponse
 {
     public function __construct(
-        public string $id,
+        public int $id,
         public string $name,
         public string $email
     ) {}

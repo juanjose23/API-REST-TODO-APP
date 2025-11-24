@@ -19,7 +19,7 @@ class PaginatedResult
         return $this->page->number;
     }
 
-    public function perPage(): bool
+    public function perPage(): int
     {
         return $this->page->size;
     }

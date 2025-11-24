@@ -1,6 +1,7 @@
 <?php
 
 namespace Src\auth\user\presentation\controllers;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -75,7 +76,7 @@ class UserController extends Controller
             ], 201);
 
         } catch (Throwable $e) {
-            \Illuminate\Log\log($e);
+            Log::error($e);
             return ErrorHelper::jsonResponse($e);
         }
     }

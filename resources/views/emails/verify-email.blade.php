@@ -144,7 +144,7 @@
 
             <h1>Hola, {{ $name }}</h1>
             <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
-            <a href="{{ $verificationUrl }}">Verificar correo</a>
+            <a href="{{ $url }}">Verificar correo</a>
 
             <p>Si el botón no funciona, también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
             <p style="background-color: #f3f4f6; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 14px;">

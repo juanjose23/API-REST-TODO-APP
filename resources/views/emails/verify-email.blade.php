@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Recuperar contraseña</title>
+    <title>Verificar correo electrónico</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -136,25 +136,23 @@
 
         <!-- Body -->
         <div class="email-body">
-            <h1>¡Hola!</h1>
-
-            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. No te preocupes, estamos aquí para ayudarte a recuperar el acceso.</p>
-
-            <p>Para crear una nueva contraseña, simplemente haz clic en el botón a continuación:</p>
-
             <h1>Hola, {{ $name }}</h1>
-            <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
-            <a href="{{ $verificationUrl }}">Verificar correo</a>
+
+            <p>Gracias por registrarte en nuestra aplicación. Para completar tu registro y comenzar a usar tu cuenta, necesitamos verificar tu dirección de correo electrónico.</p>
+
+            <p>Por favor, haz clic en el botón a continuación para verificar tu correo electrónico:</p>
+
+            <a href="{{ $verificationUrl }}" class="button">Verificar correo electrónico</a>
 
             <p>Si el botón no funciona, también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
             <p style="background-color: #f3f4f6; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 14px;">
-                {{ url( env('FRONT_URL').'/auth/reset-password/'.$token.'?email='.$email) }}
+                {{ $verificationUrl }}
             </p>
 
             <div class="divider"></div>
 
-            <p><strong>¿No solicitaste este cambio?</strong></p>
-            <p>Si no has solicitado restablecer tu contraseña, puedes ignorar este correo electrónico. Tu cuenta sigue segura y no se ha realizado ningún cambio.</p>
+            <p><strong>¿No te has registrado?</strong></p>
+            <p>Si no has creado una cuenta con nosotros, puedes ignorar este correo electrónico de forma segura.</p>
 
             <div class="security-notice">
                 <p>Por razones de seguridad, este enlace caducará en 60 minutos.</p>

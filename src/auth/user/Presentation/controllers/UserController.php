@@ -4,6 +4,7 @@ namespace Src\auth\user\presentation\controllers;
 use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use OpenApi\Attributes as OAT;
 
@@ -75,7 +76,7 @@ class UserController extends Controller
             ], 201);
 
         } catch (Throwable $e) {
-            \Illuminate\Support\Facades\Log::error($e);
+            Log::error($e);
             return ErrorHelper::jsonResponse($e);
         }
     }

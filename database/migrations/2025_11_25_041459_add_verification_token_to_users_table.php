@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('verification_token')->nullable()->after('remember_token');
+            $table->string('verification_token')->nullable()->index()->after('remember_token');
             $table->timestamp('verification_token_created_at')->nullable()->after('verification_token');
         });
     }

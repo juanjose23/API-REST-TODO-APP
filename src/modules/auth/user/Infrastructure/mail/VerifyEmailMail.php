@@ -15,13 +15,13 @@ class VerifyEmailMail extends Mailable implements ShouldQueue
     public User $user;
 
     /**
-     * Tiempo máximo para reintentos si falla.
-     * Opcional: 3 intentos, por defecto
+     * Max retry attempts if it fails.
+     * Optional: 3 attempts by default.
      */
     public int $tries = 3;
 
     /**
-     * Retraso entre intentos en segundos
+     * Delay between attempts in seconds.
      */
     public array $backoff = [10, 30, 60]; // 10s, 30s, 60s
 
@@ -38,11 +38,11 @@ class VerifyEmailMail extends Mailable implements ShouldQueue
      */
     public function build(): self
     {
-        // Token del usuario
+        // User token verification URL
         $verificationUrl = url("/auth/verify-email/{$this->user->verificationToken()}");
         $expiresAt = now()->addMinutes(60);
 
-        return $this->subject('Verifica tu correo')
+        return $this->subject('Verify your email')
             ->view('emails.verify-email')
             ->with([
                 'name' => $this->user->name()->value(),

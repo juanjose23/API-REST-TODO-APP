@@ -35,7 +35,7 @@ class VerifyEmailController extends Controller
                 'message' => $response->message
             ]);
         } catch (DomainException $e) {
-            Log::warning("Error al verificar correo: ".$e->getMessage(), ['token' => $token]);
+            Log::warning("Email verification error: " . $e->getMessage(), ['token' => $token]);
             return ErrorHelper::jsonResponse($e);
         }
     }
@@ -50,13 +50,13 @@ class VerifyEmailController extends Controller
             ($this->resendHandler)($command);
 
             return response()->json([
-                'message' => 'Correo de verificación reenviado.'
+                'message' => 'Verification email resent.'
             ]);
         } catch (DomainException $e) {
-            Log::warning("Error al reenviar token: ".$e->getMessage(), ['email' => $request->email]);
+            Log::warning("Token resend error: " . $e->getMessage(), ['email' => $request->email]);
             return ErrorHelper::jsonResponse($e);
         } catch (RandomException $e) {
-            Log::error("Error al generar nuevo token: ".$e->getMessage(), ['email' => $request->email]);
+            Log::error("New token generation error: " . $e->getMessage(), ['email' => $request->email]);
             return ErrorHelper::jsonResponse($e);
         }
     }

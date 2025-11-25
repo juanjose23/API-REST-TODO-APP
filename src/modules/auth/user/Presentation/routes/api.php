@@ -8,4 +8,5 @@ Route::post('/register', [UserController::class, 'register']);
 
 Route::get('/', [UserController::class, 'getAllUsers']);
 Route::get('/verify-email/{token}', [VerifyEmailController::class, 'verify']);
-Route::get('/resend-email', [VerifyEmailController::class, 'resend']);
+Route::get('/resend-email', [VerifyEmailController::class, 'resend'])
+    ->middleware('throttle:3,60');

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Recuperar contraseña</title>
+    <title>Email verification</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -131,23 +131,23 @@
     <div class="email-wrapper">
         <!-- Header -->
         <div class="email-header">
-            <img src="https://via.placeholder.com/200x40/4f46e5/ffffff?text=Tu+Empresa" alt="Logo" class="logo">
+            <img src="https://via.placeholder.com/200x40/4f46e5/ffffff?text=Your+Company" alt="Logo" class="logo">
         </div>
-        <p>Hola, {{ $name }}</p>
+        <p>Hello, {{ $name }}</p>
 
-        <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
+        <p>Thank you for signing up. Please verify your email by clicking the following link:</p>
 
-        <a href="{{ $url }}">Verificar correo</a>
+        <a href="{{ $url }}">Verify email</a>
 
-        <p>Este enlace expirará en 60 minutos: {{ $expiresAt->format('H:i d/m/Y') }}</p>
+        <p>This link will expire in 60 minutes: {{ $expiresAt->format('H:i m/d/Y') }}</p>
 
         <div class="divider"></div>
 
-        <p>Si no creaste esta cuenta, puedes ignorar este mensaje.</p>
+        <p>If you did not create this account, you can ignore this message.</p>
         <!-- Footer -->
         <div class="email-footer">
-            <p>&copy; {{ date('Y') }} Tu Empresa. Todos los derechos reservados.</p>
-            <p>Dirección de la empresa, Ciudad, País</p>
+            <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
+            <p>Company address, City, Country</p>
         </div>
     </div>
 </div>

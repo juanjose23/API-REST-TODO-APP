@@ -17,20 +17,20 @@ readonly class VerifyUserEmailHandler
         $user = $this->repository->findByToken($command->token);
 
         if (!$user) {
-            throw new DomainException("Usuario no encontrado.");
+            throw new DomainException("User not found.");
         }
 
         if ($user->emailVerifiedAt() !== null) {
-            return new VerifyUserEmailResponse("Correo ya verificado");
+            return new VerifyUserEmailResponse("Email already verified");
         }
 
         if ($user->isVerificationTokenExpired()) {
-            throw new DomainException("El token de verificación ha expirado. Solicita un reenvío.");
+            throw new DomainException("Verification token expired. Please request a resend.");
         }
 
         $user->setEmailVerifiedAt(new DateTimeImmutable());
         $this->repository->update($user);
 
-        return new VerifyUserEmailResponse("Correo verificado correctamente");
+        return new VerifyUserEmailResponse("Email successfully verified");
     }
 }

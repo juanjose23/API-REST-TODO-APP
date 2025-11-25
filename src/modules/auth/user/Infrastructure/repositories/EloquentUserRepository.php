@@ -3,7 +3,6 @@
 namespace  Src\modules\auth\user\Infrastructure\repositories;
 use App\Models\User as UserModel;
 use DomainException;
-use Random\RandomException;
 use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
 use Src\modules\auth\user\Domain\entities\User;
 use Src\modules\auth\user\Domain\ValuesObjects\EmailVerifiedAt;
@@ -17,12 +16,9 @@ use Src\shared\pagination\PaginatedResult;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
-    /**
-     * @throws RandomException
-     */
+
     public function register(User $user): void
     {
-        $user->setVerificationToken(bin2hex(random_bytes(16)));
         $eloquent = UserModel::create([
             'name' => $user->name()->value(),
             'email' => $user->email()->value(),
@@ -44,7 +40,7 @@ class EloquentUserRepository implements UserRepositoryInterface
         $eloquent = UserModel::find($user->id());
 
         if (!$eloquent) {
-            throw new DomainException("Usuario no encontrado.");
+            throw new DomainException("User not found.");
         }
 
         $eloquent->name = $user->name()->value();
@@ -56,7 +52,8 @@ class EloquentUserRepository implements UserRepositoryInterface
         $eloquent->avatar = $user->avatar();
         $eloquent->is_active = $user->isActive();
         $eloquent->remember_token = $user->rememberToken();
-
+        $eloquent->verification_token = $user->verificationToken();
+        $eloquent->verification_token_created_at = $user->verificationTokenCreatedAt();
         $eloquent->save();
     }
 

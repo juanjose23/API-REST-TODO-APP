@@ -16,13 +16,13 @@ use Src\shared\enums\HttpStatus;
 use Src\Shared\helpers\ErrorHelper;
 use Throwable;
 
-#[OAT\Tag(name: "Auth", description: "Operaciones de autenticación")]
+#[OAT\Tag(name: "Auth", description: "Authentication operations")]
 class UserController extends Controller
 {
     #[OAT\Post(
         path: "/v2/auth/register",
         operationId: "registerUser",
-        summary: "Registrar un usuario",
+        summary: "Register a user",
         tags: ["Auth"]
     )]
     #[OAT\RequestBody(
@@ -38,19 +38,19 @@ class UserController extends Controller
     )]
     #[OAT\Response(
         response: HttpStatus::CREATED->value,
-        description: "Usuario registrado correctamente"
+        description: "User successfully registered"
     )]
     #[OAT\Response(
         response: HttpStatus::BAD_REQUEST->value,
-        description: "Error de validación o datos incorrectos"
+        description: "Validation error or invalid data"
     )]
     #[OAT\Response(
         response: HttpStatus::UNPROCESSABLE_ENTITY->value,
-        description: "Error de dominio"
+        description: "Domain error"
     )]
     #[OAT\Response(
         response: HttpStatus::INTERNAL_SERVER_ERROR->value,
-        description: "Error inesperado"
+        description: "Unexpected error"
     )]
 
     public function register(RegisterUserRequests $request, RegisterUserHandler $handler): JsonResponse
@@ -67,7 +67,7 @@ class UserController extends Controller
             $response = $handler($command);
 
             return response()->json([
-                'message' => 'Usuario registrado correctamente',
+                'message' => 'User successfully registered',
                 'data' => [
                     'id' => $response->id,
                     'name' => $response->name,
@@ -83,34 +83,34 @@ class UserController extends Controller
     #[OAT\Get(
         path: "/v2/auth/",
         operationId: "getAllUsers",
-        summary: "Obtener todos los usuarios (protegido)",
+        summary: "Get all users (protected)",
         tags: ["Auth"]
     )]
     #[OAT\Parameter(
         name: "page",
-        description: "Número de página",
+        description: "Page number",
         in: "query",
         required: false,
         schema: new OAT\Schema(type: "integer", default: 1)
     )]
     #[OAT\Parameter(
         name: "per_page",
-        description: "Cantidad de usuarios por página",
+        description: "Users per page",
         in: "query",
         required: false,
         schema: new OAT\Schema(type: "integer", default: 10)
     )]
     #[OAT\Response(
         response: HttpStatus::OK->value,
-        description: "Listado paginado de usuarios"
+        description: "Paginated users list"
     )]
     #[OAT\Response(
         response: HttpStatus::UNAUTHORIZED->value,
-        description: "Usuario no autenticado"
+        description: "Unauthenticated user"
     )]
     #[OAT\Response(
         response: HttpStatus::INTERNAL_SERVER_ERROR->value,
-        description: "Error inesperado"
+        description: "Unexpected error"
     )]
 
     public function getAllUsers(Request $request, GetAllUsersHandler $handler): JsonResponse

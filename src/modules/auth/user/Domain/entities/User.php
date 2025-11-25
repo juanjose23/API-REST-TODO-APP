@@ -64,7 +64,7 @@ class User
     public function avatar(): ?string { return $this->avatar; }
     public function rememberToken(): ?string { return $this->rememberToken; }
     public function verificationToken(): ?string { return $this->verificationToken; }
-
+    public function verificationTokenCreatedAt(): ?DateTimeImmutable { return $this->verificationTokenCreatedAt; }
     public function setEmailVerifiedAt(DateTimeImmutable $param): void {
         $this->emailVerifiedAt = new EmailVerifiedAt($param);
     }

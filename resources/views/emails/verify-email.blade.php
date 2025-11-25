@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Recuperar contraseña</title>
+    <title>Email verification</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -131,40 +131,23 @@
     <div class="email-wrapper">
         <!-- Header -->
         <div class="email-header">
-            <img src="https://via.placeholder.com/200x40/4f46e5/ffffff?text=Tu+Empresa" alt="Logo" class="logo">
+            <img src="https://via.placeholder.com/200x40/4f46e5/ffffff?text=Your+Company" alt="Logo" class="logo">
         </div>
+        <p>Hello, {{ $name }}</p>
 
-        <!-- Body -->
-        <div class="email-body">
-            <h1>¡Hola!</h1>
+        <p>Thank you for signing up. Please verify your email by clicking the following link:</p>
 
-            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. No te preocupes, estamos aquí para ayudarte a recuperar el acceso.</p>
+        <a href="{{ $url }}">Verify email</a>
 
-            <p>Para crear una nueva contraseña, simplemente haz clic en el botón a continuación:</p>
+        <p>This link will expire in 60 minutes: {{ $expiresAt->format('H:i m/d/Y') }}</p>
 
-            <h1>Hola, {{ $name }}</h1>
-            <p>Gracias por registrarte. Por favor verifica tu correo haciendo clic en el siguiente enlace:</p>
-            <a href="{{ $verificationUrl }}">Verificar correo</a>
+        <div class="divider"></div>
 
-            <p>Si el botón no funciona, también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
-            <p style="background-color: #f3f4f6; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 14px;">
-                {{ url( env('FRONT_URL').'/auth/reset-password/'.$token.'?email='.$email) }}
-            </p>
-
-            <div class="divider"></div>
-
-            <p><strong>¿No solicitaste este cambio?</strong></p>
-            <p>Si no has solicitado restablecer tu contraseña, puedes ignorar este correo electrónico. Tu cuenta sigue segura y no se ha realizado ningún cambio.</p>
-
-            <div class="security-notice">
-                <p>Por razones de seguridad, este enlace caducará en 60 minutos.</p>
-            </div>
-        </div>
-
+        <p>If you did not create this account, you can ignore this message.</p>
         <!-- Footer -->
         <div class="email-footer">
-            <p>&copy; 2024 Tu Empresa. Todos los derechos reservados.</p>
-            <p>Dirección de la empresa, Ciudad, País</p>
+            <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
+            <p>Company address, City, Country</p>
         </div>
     </div>
 </div>

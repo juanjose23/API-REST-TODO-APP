@@ -2,16 +2,22 @@
 
 namespace App\Models;
 
+ use DateTimeImmutable;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Contracts\Auth\CanResetPassword;
+ use Tymon\JWTAuth\Contracts\JWTSubject;
+
+ /**
+  * @property string $verification_token
+  * @property DateTimeImmutable $verification_token_created_at
+  */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
 
     use HasFactory, Notifiable;
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -22,7 +28,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
@@ -37,6 +43,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'password',
         'avatar',
         'id',
+        'email_verified_at',
+        'provider_id',
+        'provider',
+        'is_active',
+        'remember_token',
+        'verification_token',
+        'verification_token_created_at',
     ];
 
     /**

@@ -5,8 +5,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        \Src\Auth\User\Infrastructure\Events\UserRegistered::class => [
-            \Src\Auth\User\Infrastructure\Listeners\SendVerificationEmail::class,
+        \Src\modules\auth\user\Infrastructure\events\UserRegistered::class => [
+            \Src\modules\auth\user\Infrastructure\listeners\SendVerificationEmail::class,
         ],
     ];
 

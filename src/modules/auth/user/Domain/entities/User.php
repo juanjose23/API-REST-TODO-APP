@@ -4,20 +4,17 @@ namespace Src\modules\auth\user\Domain\entities;
 
 use DateTimeImmutable;
 use Src\modules\auth\user\Domain\ValuesObjects\EmailVerifiedAt;
-use Src\modules\auth\user\Domain\ValuesObjects\ProviderId;
-use Src\modules\auth\user\Domain\ValuesObjects\ProviderName;
 use Src\modules\auth\user\Domain\ValuesObjects\UserEmail;
 use Src\modules\auth\user\Domain\ValuesObjects\UserName;
 use Src\modules\auth\user\Domain\ValuesObjects\UserPassword;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User
+class User implements JWTSubject
 {
     private ?int $id;
     private UserName $name;
     private UserEmail $email;
     private UserPassword $password;
-    private ?ProviderName $provider;
-    private ?ProviderId $providerId;
     private ?EmailVerifiedAt $emailVerifiedAt;
     private bool $isActive;
     private ?string $avatar;
@@ -26,25 +23,22 @@ class User
     private ?DateTimeImmutable $verificationTokenCreatedAt;
 
     public function __construct(
-        ?int $id,
-        UserName $name,
-        UserEmail $email,
-        UserPassword $password,
-        ?ProviderName $provider = null,
-        ?ProviderId $providerId = null,
-        ?EmailVerifiedAt $emailVerifiedAt = null,
-        bool $isActive = true,
-        ?string $avatar = null,
-        ?string $rememberToken = null,
-        ?string $verificationToken = null,
+        ?int               $id,
+        UserName           $name,
+        ?UserEmail          $email,
+        UserPassword       $password,
+        ?EmailVerifiedAt   $emailVerifiedAt = null,
+        bool               $isActive = true,
+        ?string            $avatar = null,
+        ?string            $rememberToken = null,
+        ?string            $verificationToken = null,
         ?DateTimeImmutable $verificationTokenCreatedAt = null
-    ) {
+    )
+    {
         $this->id = $id;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
-        $this->provider = $provider;
-        $this->providerId = $providerId;
         $this->emailVerifiedAt = $emailVerifiedAt;
         $this->isActive = $isActive;
         $this->avatar = $avatar;
@@ -53,34 +47,91 @@ class User
         $this->verificationTokenCreatedAt = $verificationTokenCreatedAt;
     }
 
-    public function id(): ?int { return $this->id; }
-    public function name(): UserName { return $this->name; }
-    public function email(): UserEmail { return $this->email; }
-    public function password(): UserPassword { return $this->password; }
-    public function provider(): ?ProviderName { return $this->provider; }
-    public function providerId(): ?ProviderId { return $this->providerId; }
-    public function emailVerifiedAt(): ?EmailVerifiedAt { return $this->emailVerifiedAt; }
-    public function isActive(): bool { return $this->isActive; }
-    public function avatar(): ?string { return $this->avatar; }
-    public function rememberToken(): ?string { return $this->rememberToken; }
-    public function verificationToken(): ?string { return $this->verificationToken; }
-    public function verificationTokenCreatedAt(): ?DateTimeImmutable { return $this->verificationTokenCreatedAt; }
-    public function setEmailVerifiedAt(DateTimeImmutable $param): void {
-        $this->emailVerifiedAt = new EmailVerifiedAt($param);
+    public function id(): ?int
+    {
+        return $this->id;
     }
 
-    public function setId(int $id): void {
+    public function name(): UserName
+    {
+        return $this->name;
+    }
+
+    public function email(): UserEmail
+    {
+        return $this->email;
+    }
+
+    public function password(): UserPassword
+    {
+        return $this->password;
+    }
+
+
+    public function emailVerifiedAt(): ?EmailVerifiedAt
+    {
+        return $this->emailVerifiedAt;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function avatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function rememberToken(): ?string
+    {
+        return $this->rememberToken;
+    }
+
+    public function verificationToken(): ?string
+    {
+        return $this->verificationToken;
+    }
+
+    public function verificationTokenCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->verificationTokenCreatedAt;
+    }
+
+    public function setEmailVerifiedAt(DateTimeImmutable $param): void
+    {
+        $this->emailVerifiedAt = new EmailVerifiedAt($param);
+    }
+    public function setId(int $id): void
+    {
         $this->id = $id;
     }
 
-    public function setVerificationToken(string $token): void {
+    public function setVerificationToken(string $token): void
+    {
         $this->verificationToken = $token;
         $this->verificationTokenCreatedAt = new DateTimeImmutable();
     }
 
-    public function isVerificationTokenExpired(int $minutes = 60): bool {
+    public function isVerificationTokenExpired(int $minutes = 60): bool
+    {
         if (!$this->verificationTokenCreatedAt) return true;
         $expireTime = $this->verificationTokenCreatedAt->modify("+$minutes minutes");
         return new DateTimeImmutable() > $expireTime;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function getJWTIdentifier(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 }

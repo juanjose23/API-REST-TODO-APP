@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\modules\auth\user\Domain\contracts;
+namespace Src\modules\auth\user\Domain\Contracts;
 
 use Src\modules\auth\user\Domain\entities\User;
 use Src\modules\auth\user\Domain\ValuesObjects\UserEmail;
@@ -15,6 +15,6 @@ interface UserRepositoryInterface
     public function update(User $user): void;
     public function findById(int $id): ?User;
     public function findByToken(string $token): ?User;
-    //public function availableUsers($teamId);
-
+    //public function findByProvider(string $provider, string $providerId): ?User;
+    public function findByEmail(UserEmail $email): ?User;
 }

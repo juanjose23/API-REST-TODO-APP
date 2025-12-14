@@ -3,7 +3,7 @@
 namespace Src\modules\auth\user\Application\Handlers;
 
 use Src\modules\auth\user\Application\Queries\getAllUsersQuery;
-use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Domain\Contracts\UserRepositoryInterface;
 use Src\shared\pagination\Page;
 use Src\shared\pagination\PaginatedResult;
 

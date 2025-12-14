@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -48,6 +49,7 @@ class ErrorHelper
 
     public static function jsonResponse(Throwable $e): jsonResponse
     {
+        Log::error($e);
         return response()->json([
             'error' => self::getMessage($e)
         ], self::getHttpCode($e));

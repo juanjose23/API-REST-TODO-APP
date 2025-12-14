@@ -6,7 +6,7 @@ use DomainException;
 use Illuminate\Support\Facades\Event;
 use Random\RandomException;
 use Src\modules\auth\user\Application\Commands\ResendVerificationTokenCommand;
-use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Domain\Contracts\UserRepositoryInterface;
 use Src\modules\auth\user\Domain\ValuesObjects\UserEmail;
 use Src\modules\auth\user\Infrastructure\events\UserRegistered;
 

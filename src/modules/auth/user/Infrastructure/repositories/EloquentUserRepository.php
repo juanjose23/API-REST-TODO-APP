@@ -3,11 +3,9 @@
 namespace  Src\modules\auth\user\Infrastructure\repositories;
 use App\Models\User as UserModel;
 use DomainException;
-use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Domain\Contracts\UserRepositoryInterface;
 use Src\modules\auth\user\Domain\entities\User;
 use Src\modules\auth\user\Domain\ValuesObjects\EmailVerifiedAt;
-use Src\modules\auth\user\Domain\ValuesObjects\ProviderId;
-use Src\modules\auth\user\Domain\ValuesObjects\ProviderName;
 use Src\modules\auth\user\Domain\ValuesObjects\UserEmail;
 use Src\modules\auth\user\Domain\ValuesObjects\UserName;
 use Src\modules\auth\user\Domain\ValuesObjects\UserPassword;
@@ -23,8 +21,6 @@ class EloquentUserRepository implements UserRepositoryInterface
             'name' => $user->name()->value(),
             'email' => $user->email()->value(),
             'password' => $user->password()->value(),
-            'provider' => $user->provider()?->value(),
-            'provider_id' => $user->providerId()?->value(),
             'email_verified_at' => $user->emailVerifiedAt()?->value(),
             'avatar' => $user->avatar(),
             'is_active' => $user->isActive(),
@@ -45,9 +41,6 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         $eloquent->name = $user->name()->value();
         $eloquent->email = $user->email()->value();
-        $eloquent->password = $user->password()->value();
-        $eloquent->provider = $user->provider()?->value();
-        $eloquent->provider_id = $user->providerId()?->value();
         $eloquent->email_verified_at = $user->emailVerifiedAt()?->value();
         $eloquent->avatar = $user->avatar();
         $eloquent->is_active = $user->isActive();
@@ -94,8 +87,6 @@ class EloquentUserRepository implements UserRepositoryInterface
             name: new UserName($eloquent->name),
             email: new UserEmail($eloquent->email),
             password: UserPassword::fromHashed($eloquent->password),
-            provider: $eloquent->provider ? new ProviderName($eloquent->provider) : null,
-            providerId: $eloquent->provider_id ? new ProviderId($eloquent->provider_id) : null,
             emailVerifiedAt: $eloquent->email_verified_at
                 ? new EmailVerifiedAt($eloquent->email_verified_at->toDateTimeImmutable())
                 : null,
@@ -104,10 +95,6 @@ class EloquentUserRepository implements UserRepositoryInterface
             rememberToken: $eloquent->remember_token
         );
     }
-
-
-
-
     public function getAllUsers(Page $page): PaginatedResult
     {
         $query = UserModel::query()

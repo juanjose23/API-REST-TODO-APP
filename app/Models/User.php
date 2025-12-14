@@ -5,7 +5,9 @@ namespace App\Models;
  use DateTimeImmutable;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+ use Illuminate\Database\Eloquent\Relations\HasMany;
+ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
  use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -44,8 +46,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'avatar',
         'id',
         'email_verified_at',
-        'provider_id',
-        'provider',
         'is_active',
         'remember_token',
         'verification_token',
@@ -75,12 +75,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         ];
     }
     // relaciones
-    public function tasksCreated()
+    public function tasksCreated(): HasMany
     {
         return $this->hasMany(Task::class, 'creator_id');
     }
 
-    public function tasksAssigned()
+    public function tasksAssigned():HasMany
     {
         return $this->hasMany(Task::class, 'assigned_to_id');
     }
@@ -89,19 +89,24 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     // {
     //     return $this->belongsToMany(Team::class);
     // }
-  public function teams()
+  public function teams():BelongsToMany
 {
     return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id')
                 ->withPivot('roles')
                 ->withTimestamps();
 }
 
-    public function teamsCreated()
+    public function teamsCreated():HasMany
     {
         return $this->hasMany(Team::class, 'user_id');
     }
-    public function invitations()
+    public function invitations():HasMany
     {
         return $this->hasMany(Invitation::class);
+    }
+
+    public function userProviders(): HasMany
+    {
+        return $this->hasMany(UserProvider::class);
     }
 }

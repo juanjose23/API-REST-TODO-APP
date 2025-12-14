@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User implements JWTSubject
 {
-    public ?int $id;
+    private ?int $id;
     private UserName $name;
     private UserEmail $email;
     private UserPassword $password;

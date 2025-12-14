@@ -14,8 +14,6 @@ class UserMapper
             'name' => $user->name()->value(),
             'email' => $user->email()->value(),
             'avatar' => $user->avatar(),
-            'email_verified_at' => $user->emailVerifiedAt()?->value()?->format('Y-m-d H:i:s'),
-            'is_active' => $user->isActive(),
         ];
     }
 }

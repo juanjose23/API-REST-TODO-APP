@@ -41,7 +41,6 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         $eloquent->name = $user->name()->value();
         $eloquent->email = $user->email()->value();
-        $eloquent->provider_id = $user->providerId()?->value();
         $eloquent->email_verified_at = $user->emailVerifiedAt()?->value();
         $eloquent->avatar = $user->avatar();
         $eloquent->is_active = $user->isActive();
@@ -96,14 +95,6 @@ class EloquentUserRepository implements UserRepositoryInterface
             rememberToken: $eloquent->remember_token
         );
     }
-//    public function findByProvider(string $provider, string $providerId): ?User
-//    {
-//        $eloquent = UserModel::where('provider', $provider)
-//            ->where('provider_id', $providerId)
-//            ->first();
-//        if (!$eloquent) return null;
-//        return $this->mapToEntity($eloquent);
-//    }
     public function getAllUsers(Page $page): PaginatedResult
     {
         $query = UserModel::query()

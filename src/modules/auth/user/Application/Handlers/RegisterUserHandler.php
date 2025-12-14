@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Random\RandomException;
 use Src\modules\auth\user\Application\Commands\RegisterUser\RegisterUserCommand;
 use Src\modules\auth\user\Application\Dtos\RegisterUserResponse;
-use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Domain\Contracts\UserRepositoryInterface;
 use Src\modules\auth\user\Domain\entities\User;
 use Src\modules\auth\user\Domain\ValuesObjects\UserEmail;
 use Src\modules\auth\user\Domain\ValuesObjects\UserName;

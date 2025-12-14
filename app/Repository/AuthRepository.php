@@ -17,7 +17,7 @@ class AuthRepository implements AuthInterface
     }
 public function availableUsers($teamId)
 {
-    $teamId = (int) $teamId; // asegurar que es int
+    $teamId = (int) $teamId;
 
     $users = User::select('id', 'name', 'email', 'avatar')
         ->where('is_active', true)

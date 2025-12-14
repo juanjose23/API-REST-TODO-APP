@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use DomainException;
 use Src\modules\auth\user\Application\Commands\VerifyUserEmailCommand;
 use Src\modules\auth\user\Application\Dtos\VerifyUserEmailResponse;
-use Src\modules\auth\user\Domain\contracts\UserRepositoryInterface;
+use Src\modules\auth\user\Domain\Contracts\UserRepositoryInterface;
 
 readonly class VerifyUserEmailHandler
 {

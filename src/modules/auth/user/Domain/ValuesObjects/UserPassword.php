@@ -36,6 +36,12 @@ class UserPassword
     {
         return new self($hashed);
     }
+
+    public static function empty(): self
+    {
+        return new self('');
+    }
+
     public function check(string $plain): bool
     {
         return password_verify($plain, $this->hashed);

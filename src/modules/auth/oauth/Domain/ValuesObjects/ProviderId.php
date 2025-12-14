@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\modules\auth\user\Domain\ValuesObjects;
+namespace Src\modules\auth\oauth\Domain\ValuesObjects;
 
 class ProviderId
 {
